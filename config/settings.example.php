@@ -1,25 +1,24 @@
 <?php $settings = (object) array(
 	"email" => (object) array(
-		"host" => "mail.example.com",
+		"host" => "smtp.office365.com",
 		"port" => "587",
 		"auth" => true,
-		"username" => "admin@example.com",
-		"password" => "supersecret",
-		"localhost" => "example.com"
+		"username" => "username",
+		"password" => "password",
+		"localhost" => "domain.com"
 	),
 	"mysql" => (object) array(
 		"hostname" => "localhost",
-		"username" => "anode",
-		"password" => "megasecret",
-		"database" => "anode"
-	),
-	"neo4j" => (object) array(
-		"username" => "user",
-		"password" => "pass"
+		"username" => "watcher",
+		"password" => "",
+		"database" => "watcher"
 	),
 	"client" => (object) array(
-		"api" => "http://example.com/anode/",
-		"email_cookie" => "anode_email",
-		"token_cookie" => "anode_token"
-	)
+		"api" => "http://server.com/watcher/",
+		"email_cookie" => "watcher_email",
+		"token_cookie" => "watcher_token"
+	),
+  "checks" => (object) [
+    ['http://domain.com:1234/'                                   ,'<html>'         ],
+  ]
 );

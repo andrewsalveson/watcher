@@ -69,7 +69,8 @@ class Service{
       foreach($checks as $check){
         $url = $check[0];
         $chk = preg_quote($check[1]);
-        $res = \Sal\CurlClient::get($url);
+        $result = \Sal\CurlClient::get($url);
+        $res = $result->RESPONSE;
         $status = "ERR";
         $pattern = "#^$chk#";
         if(preg_match($pattern,$res)){
@@ -77,6 +78,7 @@ class Service{
         }
         $this->output["results"][] = [
           "URL"=>$url,
+          "HTTP_CODE"=>$result->HTTP_CODE,
           "STATUS"=>$status
         ];
       }

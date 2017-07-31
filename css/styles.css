@@ -1,6 +1,20 @@
+a{
+  text-decoration:none;
+  color:#fff;
+}
+
 .OK{
-  background-color:green;
+  background-color:#004400;
 }
 .ERR{
-  background-color:red;
+  background-color:#440000;
+}
+.code{
+  font-family: monospace;
+}
+.code_200{
+  color:#00ff00;
+}
+.code_403{
+  color:#ff0000;
 }

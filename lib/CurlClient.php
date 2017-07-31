@@ -10,6 +10,7 @@ class CurlClient{
     curl_setopt($ch, CURLOPT_TIMEOUT, 0);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     $output = curl_exec($ch);
+    $info = curl_getinfo($ch);
     curl_close($ch);
     $response = '';
     switch($responseType){
@@ -20,7 +21,10 @@ class CurlClient{
         $response = $output;
         break;
     }
-    return $response;
+    return (object)[
+      'RESPONSE'=>$response,
+      'HTTP_CODE'=>$info['http_code']
+    ];
   }
   static function get_json($url){
     return CurlClient::get($url,'json');
@@ -37,6 +41,7 @@ class CurlClient{
     curl_setopt($ch, CURLOPT_POST, 1);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     $output = curl_exec($ch);
+    $info = curl_getinfo($ch);
     curl_close($ch);
     $response = '';
     switch($responseType){
@@ -46,6 +51,9 @@ class CurlClient{
       default:
         $response = $output;
     }
-    return $response;
+    return (object)[
+      'RESPONSE'=>$response,
+      'HTTP_CODE'=>$info['http_code']
+    ];
   }
 }
