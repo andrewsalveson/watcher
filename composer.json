@@ -1,0 +1,19 @@
+{
+  "name": "andrewsalveson/watcher",
+  "authors": [
+    {
+      "name": "Andrew Salveson",
+      "email": "andrewsalveson@gmail.com"
+    }
+  ],
+  "require": {
+		"everyman/neo4jphp" : "dev-master",
+		"neoxygen/neoclient": "~2.1",
+    "slim/slim" : "~2.0"
+  },
+	"autoload" : {
+		"psr-4" : {
+			"Sal\\": "lib/"
+		}
+	}
+}
