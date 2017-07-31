@@ -4,11 +4,13 @@ class Service{
 		"messages" => [],
 		"results" => []
 	];
+  var $settings;
 	var $api;
 	var $graph;
 	var $debug = false;
 	
 	function __construct($settings){
+    $this->settings = $settings;
 		$this->admin = new \Sal\Admin($settings);
 		$this->graph = new \Sal\Graph($settings);
 		$this->api = new \Slim\Slim();
@@ -60,6 +62,25 @@ class Service{
 			$e = $_REQUEST['email'];
 			$this->output["results"] = $this->admin->reset($e,$t,$p);	
 		});
+    
+    $this->api->get('/status',function(){
+      $this->output["results"] = [];
+      $checks = $this->settings->checks;
+      foreach($checks as $check){
+        $url = $check[0];
+        $chk = preg_quote($check[1]);
+        $res = \Sal\CurlClient::get($url);
+        $status = "ERR";
+        $pattern = "#^$chk#";
+        if(preg_match($pattern,$res)){
+          $status = "OK";
+        }
+        $this->output["results"][] = [
+          "URL"=>$url,
+          "STATUS"=>$status
+        ];
+      }
+    });
 	}
 	function set_table_routes(){
 		$this->api->get('/user/name',function(){
