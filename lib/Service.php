@@ -69,7 +69,11 @@ class Service{
       foreach($checks as $check){
         $url = $check[0];
         $chk = preg_quote($check[1]);
-        $result = \Sal\CurlClient::get($url);
+        $config = (object)[
+          'url' => $url,
+          'timeout' => $this->settings->watcher->timeout
+        ];
+        $result = \Sal\CurlClient::get($config);
         $res = $result->RESPONSE;
         $status = "ERR";
         $pattern = "#^$chk#";
