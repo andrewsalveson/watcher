@@ -62,32 +62,45 @@ class Service{
 			$e = $_REQUEST['email'];
 			$this->output["results"] = $this->admin->reset($e,$t,$p);	
 		});
-    
+    $this->api->get('/items',function(){
+      $this->output["results"] = array_keys((array)$this->settings->checks);
+    });
+    $this->api->get('/items/:id',function($id){
+      $checks = $this->settings->checks;
+      if(!isset($checks->$id)){
+        throw new Exception("ID $id not found");
+      }
+      $this->output["results"][] = $this->perform_check($checks->$id);
+    });
     $this->api->get('/status',function(){
       $this->output["results"] = [];
       $checks = $this->settings->checks;
       foreach($checks as $check){
-        $url = $check[0];
-        $chk = preg_quote($check[1]);
-        $config = (object)[
-          'url' => $url,
-          'timeout' => $this->settings->watcher->timeout
-        ];
-        $result = \Sal\CurlClient::get($config);
-        $res = $result->RESPONSE;
-        $status = "ERR";
-        $pattern = "#^$chk#";
-        if(preg_match($pattern,$res)){
-          $status = "OK";
-        }
-        $this->output["results"][] = [
-          "URL"=>$url,
-          "HTTP_CODE"=>$result->HTTP_CODE,
-          "STATUS"=>$status
-        ];
+        $this->output["results"][] = $this->perform_check($check);
       }
     });
 	}
+  function perform_check($check){
+    $url = $check->URL;
+    $chk = preg_quote($check->RESPONSE);
+    $config = (object)[
+      'url' => $url,
+      'timeout' => $this->settings->watcher->timeout
+    ];
+    $result = \Sal\CurlClient::get($config);
+    $res = $result->RESPONSE;
+    $status = "ERR";
+    $pattern = "#^$chk#";
+    if(preg_match($pattern,$res)){
+      $status = "OK";
+    }
+    return (object)[
+      "ID"=>"{$check->ID}",
+      "URL"=>$url,
+      "HTTP_CODE"=>$result->HTTP_CODE,
+      "STATUS"=>$status
+    ];
+  }
 	function set_table_routes(){
 		$this->api->get('/user/name',function(){
 			$name = $_COOKIE['anode_email'];
