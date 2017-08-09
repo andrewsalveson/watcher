@@ -300,6 +300,7 @@ class Service{
 		header('Access-Control-Allow-Origin: *');
 		switch($type){
 			case 'json':
+        header('Content-type:application/json;charset=utf-8');
 				echo json_encode($this->output,JSON_PRETTY_PRINT);
 				break;
 			case 'xml':
