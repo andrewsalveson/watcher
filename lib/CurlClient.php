@@ -2,13 +2,17 @@
 class CurlClient{
   static function get($config){
     $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $config->url);
+    curl_setopt($ch, CURLOPT_URL, $config->url); // required
     curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)");
     curl_setopt($ch, CURLOPT_HEADER, 0);
     curl_setopt($ch, CURLINFO_HEADER_OUT, true);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_TIMEOUT, $config->timeout);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_TIMEOUT       ,(isset($config->timeout)?$config->timeout:5));
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER,(isset($config->ssl    )?$config->ssl:false));
+    if(isset($config->cainfo)){
+      curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+      curl_setopt($ch, CURLOPT_CAINFO, $config->cainfo);
+    }
     $output = curl_exec($ch);
     $info = curl_getinfo($ch);
     curl_close($ch);
@@ -38,9 +42,13 @@ class CurlClient{
     curl_setopt($ch, CURLOPT_HEADER, 0);
     curl_setopt($ch, CURLINFO_HEADER_OUT, true);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_TIMEOUT, $config->timeout);
     curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_TIMEOUT       ,(isset($config->timeout)?$config->timeout:5));
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER,(isset($config->ssl    )?$config->ssl:false));
+    if(isset($config->cainfo)){
+      curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+      curl_setopt($ch, CURLOPT_CAINFO, $config->cainfo);
+    }
     $output = curl_exec($ch);
     $info = curl_getinfo($ch);
     curl_close($ch);
