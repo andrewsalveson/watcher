@@ -25,7 +25,7 @@ var loadResults = function(response){
     var url    = result.URL;
     var htcode = result.HTTP_CODE;
     var status = result.STATUS;
-    $(`#CHECK_${id}`).html(`<button class="refresh">refresh</button><span class="${status}"><span class="code code_${htcode}">${htcode}</span><a href="">${url}</a><span>`);
+    $(`#CHECK_${id}`).html(`<button class="refresh">refresh</button><span class="${status}"><span class="code code_${htcode}">${htcode}</span><a href="${url}">${url}</a><span>`);
   }
 };
 var getId       = function(id){
